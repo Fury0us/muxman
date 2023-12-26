@@ -20,3 +20,5 @@ added too many options to list here, but some include:
 - add figlet custom startup message
 - pentesting tools menu
 - and many more
+## Update 12/26/23
+fixed a few bugs and added a few more tools
