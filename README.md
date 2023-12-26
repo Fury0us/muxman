@@ -12,3 +12,11 @@ added some graphics all well as fixed some bugs
 added a new root(superuser) menu for users with root functionality, 
 many cool features coming soon!
 (only superuser session supported currently)
+## Update 12/25/23
+added too many options to list here, but some include:
+- custom alias adder
+- add neofetch @ start (rxfetch)
+- add custom startup message
+- add figlet custom startup message
+- pentesting tools menu
+- and many more
