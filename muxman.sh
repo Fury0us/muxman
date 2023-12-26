@@ -30,13 +30,71 @@ echo $'\e[1;31m|    /| | | || | | | | |  \e[0m'
 echo $'\e[1;31m| |\ \| \_/ /\ \_/ / | |  \e[0m'
 echo $'\e[1;31m\_| \_|\___/  \___/  \_/  \e[0m'
 }
+file_menu() {
+COLUMNS=12
+asci_intro
+echo -en '\n'
+root_art
+echo -en '\n'
+PS3=("#fileman: ")
+filesman=("Custom Location" "Termux to Downloads(Internal)" "Downloads to Termux(Home)" "Open File Permissions" "Previous Menu" "Main Menu")
+select fil in "${filesman[@]}"; do
+case $fil in
+"Custom Location")
+read -p $'\e[31mFile Location?: \e[0m' flloc
+echo -en '\n'
+read -p $'\e[31mCopy Location?: \e[0m' cploc
+echo -en '\n'
+echo $'\e[31mMAKE SURE TSU IS INSTALLED\e[0m'
+sleep 2
+sudo cp $flloc $cploc
+file_menu
+;;
+"Termux to Downloads(Internal)")
+read -p $'\e[31mFile?: \e[0m' tdfl
+echo -en '\n'
+echo $'\e[31mMAKE SURE TSU IS INSTALLED!\e[0m'
+sleep 2
+sudo cp /data/data/com.termux/files/home/"$tdfl" /storage/self/primary/Download
+file_menu
+;;
+"Downloads to Termux(Home)")
+read -p $'\e[31mFile?: \e[0m' dtfl
+echo -en '\n'
+echo $'\e[31mMAKE SURE TSU IS INSTALLED!\e[0m'
+sleep 2
+sudo cp /storage/self/primary/Download/"$dtfl" /data/data/com.termux/files/home
+file_menu
+;;
+"Open File Permissions")
+echo -en '\n'
+echo $'\e[31mThis will change a files permissions so that anyone can read, write, and execute\e[0m'
+echo -en '\n'
+sleep 3
+read -p $'\e[31mFile?: \e[0m' xfile
+echo -en '\n'
+sudo chmod a+rwx $xfile
+echo -en '\n'
+file_menu
+;;
+"Previous Menu")
+clear
+surootmenu
+;;
+"Main Menu")
+clear
+main_menu
+;;
+esac
+done
+}
 tools_menu() {
 COLUMNS=12
 echo ""
 asci_intro
 echo ""
 PS3=("#tools: ")
-toolsmenu=("Install Tool-X" "Install Sqlmap" "Install Nikto" "Install fsociety" "Previous Menu")
+toolsmenu=("Install Tool-X" "Install Sqlmap" "Install Wifite" "Install Airgeddon" "Install Nikto" "Install fsociety" "Previous Menu")
 select too in "${toolsmenu[@]}"; do
 case $too in
 "Install Tool-X")
@@ -64,6 +122,33 @@ echo $'\e[31mcd sqlmap & python2 sqlmap.py\e[0m'
 echo -en '\n'
 sleep 3 &&
 python3 sqlmap.py
+tools_menu
+;;
+"Install Wifite")
+apt update -y &&
+apt upgrade -y &&
+apt install git python2 -y &&
+git clone https://github.com/derv82/wifite2.git &&
+cd wifite2 &&
+chmod +x Wifite.py &&
+chmod +x setup.py &&
+python2 setup.py install
+echo "Wifite has been installed, please make sure you have root functionality or it wont work"
+echo -en '\n'
+echo "best to install as root user to prevent issues"
+sleep 3
+tools_menu
+;;
+"Install Airgeddon")
+pkg update -y &&
+pkg upgrade -y &&
+pkg install git python ffmpeg wget curl &&
+git clone https://github.com/v1s1t0r1sh3r3/airgeddon.git &&
+cd airgeddon &&
+echo "Airgeddon has been installed, please make sure you have root functionality or it wont work"
+echo -en '\n'
+echo "best to install as root user to prevent issues"
+sleep 3
 tools_menu
 ;;
 "Install Nikto")
@@ -173,9 +258,18 @@ echo ""
 COLUMNS=12
 echo -en '\n'
 PS3=("#super: ")
-surtmnu=("SU session" "Device Options" "Auditing Tools" "Main Menu" "Exit")
+surtmnu=("Install Sudo Functionality" "SU session" "Device Options" "Transfer to/from internal storage" "Auditing Tools" "Main Menu" "Exit")
 select surt in "${surtmnu[@]}"; do
 case $surt in
+"Install Sudo Functionality")
+pkg update &&
+pkg upgrade &&
+pkg install tsu &&
+clear &&
+echo $'\e[31myou can now use the "sudo" command to run normal linux like commands\e[0m'
+sleep 2
+surootmenu
+;;
 "SU session")
 echo -en '\n'
 echo $'\e[1;31mtype "exit" to return to terminal! \e[0m'
@@ -186,6 +280,10 @@ su
 clear
 dev_opt
 COLUMNS=12
+;;
+"Transfer to/from internal storage")
+clear
+file_menu
 ;;
 "Auditing Tools")
 clear
@@ -212,7 +310,7 @@ root_art
 echo ""
 COLUMNS=12
 PS3=("#aud: ")
-aud=("nmap scan" "Previous" "Main" "exit")
+aud=("nmap scan" "Nikto Scan" "Previous" "Main" "exit")
 select a in "${aud[@]}"; do
 case $a in
 "nmap scan")
@@ -237,6 +335,13 @@ sudo nmap -v -sn -Pn $domain
 read -p $'\e[1;36mDomain or IPto scan?: \e[0m' domain
 echo ""
 sudo nmap -A -Pn $domain
+;;
+"Nikto Scan")
+read -p $'\e[31mWebsite?: \e[0m' site
+cd ~ &&
+cd nikto &&
+cd program &&
+perl nikto.pl -h $site
 ;;
 "previous menu")
 clear
@@ -337,7 +442,7 @@ echo ""
 read -p $'\e[31mPath to script matching alias?: \e[0m' scph
 echo ""
 cd ~ &&
-echo "alias $ali=\'$scph\'" >> .zshrc
+echo "alias $ali='$scph'" >> .zshrc
 echo ""
 echo $'\e[36mAlias Created, please restart termux\e[0m'
 sleep 1
@@ -443,9 +548,7 @@ case $opt in
           echo ""
           cd ~ &&
           cd .. &&
-          echo $'\e[1;36m-----------------------------------------------------\e[0m' >> usr/etc/profile.d/init-termux-properties.sh &&
-          echo "figlet -f lean $smsg" >> usr/etc/profile.d/init-termux-properties.sh &&
-          echo $'\e[1;36m-----------------------------------------------------\e[0m' >> usr/etc/profile.d/init-termux-properties.sh
+          echo "figlet -f banner $smsg" >> usr/etc/profile.d/init-termux-properties.sh &&
           echo ""
           echo $'\e[1;36mRestart termux to take effect\e[0m'
           sleep 1 &&
