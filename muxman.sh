@@ -1,4 +1,110 @@
 #!/bin/bash
+#start asci intro here
+clear
+echo $'\e[0m'
+asci_intro() {
+echo $'\e[1;32m*********************************************\e[0m'
+echo $'\e[1;32m* __  __                 __  __             *\e[0m'
+echo $'\e[1;32m*|  \/  |_   ___  __    |  \/  | __ _ _ __  *\e[0m'
+echo $'\e[1;32m*| |\/| | | | \ \/ /____| |\/| |/ _` | `_ \ *\e[0m'
+echo $'\e[1;32m*| |  | | |_| |>  <_____| |  | | (_| | | | |*\e[0m'
+echo $'\e[1;32m*|_|  |_|\__,_/_/\_\    |_|  |_|\__,_|_| |_|*\e[0m'
+echo $'\e[1;32m*********************************************\e[0m'
+}
+credits() {
+echo $'\e[1;36m              (                                \e[0m'
+echo $'\e[1;36m    )         )\ )                  )          \e[0m'
+echo $'\e[1;36m ( /( (      (()/(  (  (   (     ( /(   (      \e[0m'
+echo $'\e[1;36m )\()))\ )    /(_))))\ )(  )\ )  )\()) ))\ (   \e[0m'
+echo $'\e[1;36m((_)\(()/( _ (_))_/((_(()\(()/( ((_)\ /((_))\  \e[0m'
+echo $'\e[1;36m| |(_))(_)(_)| __|_))( ((_))(_))/  (_(_))(((_) \e[0m'
+echo $'\e[1;36m| `_ | || |_ | __| || | `_| || | // || | (_-< \e[0m'
+echo $'\e[1;36m|_.__/\_, (_)|_|  \_,_|_|  \_, |\__/ \_,_/__/ \e[0m'
+echo $'\e[1;36m      |__/                 |__/                \e[0m'
+}
+root_art() {
+echo $'\e[1;31m______ _____  _____ _____ \e[0m'
+echo $'\e[1;31m| ___ \  _  ||  _  |_   _|\e[0m'
+echo $'\e[1;31m| |_/ / | | || | | | | |  \e[0m'
+echo $'\e[1;31m|    /| | | || | | | | |  \e[0m'
+echo $'\e[1;31m| |\ \| \_/ /\ \_/ / | |  \e[0m'
+echo $'\e[1;31m\_| \_|\___/  \___/  \_/  \e[0m'
+}
+tools_menu() {
+COLUMNS=12
+echo ""
+asci_intro
+echo ""
+PS3=("#tools: ")
+toolsmenu=("Install Tool-X" "Install Sqlmap" "Install Nikto" "Install fsociety" "Previous Menu")
+select too in "${toolsmenu[@]}"; do
+case $too in
+"Install Tool-X")
+apt update -y &&
+apt upgrade -y &&
+apt install git &&
+git clone https://github.com/fu8uk1/Tool-X.git &&
+cd Tool-X &&
+chmod +x install.aex &&
+sh install.aex &&
+./install.aex
+;;
+"Install Sqlmap")
+pkg update -y &&
+pkg upgrade -y &&
+apt install python python2 -y &&
+pkg install git -y &&
+git clone https://github.com/sqlmapproject/sqlmap &&
+cd sqlmap &&
+chmod +x sqlmap.py &&
+echo -en '\n'
+echo $'\e[31mYou can run Sqlmap as follows: \e[0m'
+echo -en '\n'
+echo $'\e[31mcd sqlmap & python2 sqlmap.py\e[0m'
+echo -en '\n'
+sleep 3 &&
+python3 sqlmap.py
+tools_menu
+;;
+"Install Nikto")
+apt update -y &&
+apt upgrade -y &&
+pkg install git -y &&
+pkg install perl -y &&
+git clone https://github.com/sullo/nikto.git &&
+cd nikto &&
+cd program &&
+perl nikto.pl -h &&
+echo -en '\n' &&
+echo $'\e[31mYou can run site scans as follows:\e[0m'
+echo -en '\n'
+echo $'\e[31mcd nikto & cd program & perl nikto.pl -h <website>\e[0m'
+echo -en '\n'
+sleep 3
+tools_menu
+;;
+"Install fsociety")
+pkg install git -y &&
+pkg install wget -y &&
+pkg install python2 -y &&
+git clone https://github.com/Manisso/fsociety.git &&
+cd fsociety &&
+chmod +x install.sh &&
+bash install.sh &&
+echo -en '\n' &&
+echo $'\e[31mYou can run fsociety by cd into fsociety and run python2 fsociety.py\e[0m' &&
+echo -en '\n' &&
+sleep 3 &&
+python2 fsociety.py
+tools_menu
+;;
+"Previous Menu")
+clear
+termux_config
+;;
+esac
+done
+}
 #start the main menu function
 main_menu() {
 asci_intro
@@ -7,6 +113,7 @@ credits
 echo -en '\n'
 COLUMNS=12
 PS3=("#: ")
+echo $'\e[36m'
 options=("Ping Google" "list IP address" "list MAC address" "update and upgrade" "termux config" "SU MENU(ROOT)" "Exit")
 select opt in "${options[@]}"; do
 case $opt in
@@ -54,13 +161,16 @@ case $opt in
           ;;
 esac
 done
+echo $'\e[0m'
 }
 #termux_config section
 surootmenu() {
-echo -en '\n'
+echo ""
 asci_intro
-echo -en '\n'
+echo ""
 root_art
+echo ""
+COLUMNS=12
 echo -en '\n'
 PS3=("#super: ")
 surtmnu=("SU session" "Device Options" "Auditing Tools" "Main Menu" "Exit")
@@ -74,13 +184,11 @@ su
 ;;
 "Device Options")
 clear
-asci_intro
 dev_opt
 COLUMNS=12
 ;;
 "Auditing Tools")
 clear
-asci_intro
 aud_tools
 COLUMNS=12
 ;;
@@ -97,9 +205,70 @@ esac
 done
 }
 aud_tools() {
+echo ""
+asci_intro
+echo ""
+root_art
+echo ""
+COLUMNS=12
 PS3=("#aud: ")
+aud=("nmap scan" "Previous" "Main" "exit")
+select a in "${aud[@]}"; do
+case $a in
+"nmap scan")
+PS3=("#nmap: ")
+nmp=("check install" "basic scan" "full scan(TCP)" "previous menu" "root menu")
+select n in "${nmp[@]}"; do
+case $n in
+"check install")
+read -p $'\e[1;36mapt or pkg?: \e[0m' pg
+if [ "$pg" == "apt" ]; then
+apt install nmap
+elif [ "$pg" == "pkg" ]; then
+pkg install nmap
+fi
+;;
+"basic scan")
+read -p $'\e[1;36mDomain or IPto scan?: \e[0m' domain
+echo ""
+sudo nmap -v -sn -Pn $domain
+;;
+"full scan(TCP)")
+read -p $'\e[1;36mDomain or IPto scan?: \e[0m' domain
+echo ""
+sudo nmap -A -Pn $domain
+;;
+"previous menu")
+clear
+aud_tools
+;;
+"root menu")
+clear
+surootmenu
+;;
+esac
+done
+;;
+"Previous")
+clear
+surootmenu
+;;
+"Main")
+clear
+main_menu
+;;
+"exit")
+exit
+;;
+esac
+done
 }
 dev_opt() {
+echo ""
+asci_intro
+echo ""
+root_art
+echo ""
 COLUMNS=12
 PS3=("#devopt: ")
 devopt=("Change All Device Information" "IP Menu" "MAC Menu" "Main" "Exit")
@@ -134,17 +303,61 @@ done
 }
 mac_menu() {
 echo "mac menu"
+dev_opt
 }
 ip_menu() {
 echo "ip menu"
+dev_opt
 }
 change_dev_info() {
 echo "spoof device"
+dev_opt
+}
+ohmyzshmenu() {
+#oh-my-zsh menu
+COLUMNS=12
+echo ""
+asci_intro
+echo ""
+PS3=("#ohmzsh: ")
+ohmyshell=("Change Color" "Change Font" "Set Alias" "Previous Menu")
+select ohm in "${ohmyshell[@]}"; do
+case $ohm in
+"Change Color")
+chcolor
+ohmyzshmenu
+;;
+"Change Font")
+chfont
+ohmyzshmenu
+;;
+"Set Alias")
+read -p $'\e[31mAlias name?(terminal shortut): \e[0m' ali
+echo ""
+read -p $'\e[31mPath to script matching alias?: \e[0m' scph
+echo ""
+cd ~ &&
+echo "alias $ali=\'$scph\'" >> .zshrc
+echo ""
+echo $'\e[36mAlias Created, please restart termux\e[0m'
+sleep 1
+echo ""
+ohmyzshmenu
+;;
+"Previous Menu")
+clear
+termux_config
+;;
+esac
+done
 }
 termux_config() {
 COLUMNS=12
+echo ""
+asci_intro
+echo ""
 PS3=("#: ")
-options=("Setup Termux" "Remove Default Termux Start Message" "Install oh-my-zsh" "View Installed Packages" "Search For Package" "Install rxfetch(neofetch)" "Install Package" "Change Repo" "Install X11 Repo" "Install Root Repo" "Main Menu" "Exit")
+options=("Setup Termux" "Tools Menu" "Remove Default Termux Start Message" "Set Custom Startup Message" "neofetch(rxfetch) startup" "Set Figlet Startup Message" "Install oh-my-zsh" "oh-my-zsh menu" "View Installed Packages" "Search For Package" "Install rxfetch(neofetch)" "Install Package" "Change Repo" "Install X11 Repo" "Install Root Repo" "Main Menu" "Exit")
 select opt in "${options[@]}"; do
 case $opt in
           "Setup Termux")
@@ -158,9 +371,12 @@ case $opt in
           echo $'\e[31mTermux Has Been Set Up Successfully!\e[0m'
           sleep 2
           clear
-          asci_intro
           termux_config
           COLUMNS=12
+          ;;
+          "Tools Menu")
+          clear
+          tools_menu
           ;;
           "Remove Default Termux Start Message")
           cd ~ && cd .. && cd usr && cd etc &&
@@ -176,13 +392,64 @@ case $opt in
                echo -n "figlet -f standard Mux" >> bash.bashrc
           elif [ $var1 = "own" ]
           then
-               echo $'\e[1;31mEDIT VIA usr/etc/bash.bashrc file\e[0m'
+               echo $'\e[1;31mEDIT VIA usr/etc/profile.d/init-termux-properties.sh file\e[0m'
                sleep 3
           else
-               echo $'\e[1;31mEDIT VIA usr/etc/bash.bashrc file \e[0m'
+               echo $'\e[1;31mEDIT VIA usr/etc/profile.d/init-termux-properties.sh file \e[0m'
                sleep 3
           fi
-          asci_intro
+          termux_config
+          COLUMNS=12
+          ;;
+          "Set Custom Startup Message")
+          echo ""
+          echo $'\e[1;36mTermux will now open a nano editor at the startup location\e[0m'
+          echo ""
+          echo $'\e[1;36mcopy and paste asci art, or use figlet, set statup scripts, etc.\e[0m'
+          echo ""
+          sleep 1 &&
+          cd ~ &&
+          cd .. &&
+          nano usr/etc/profile.d/init-termux-properties.sh &&
+          termux_config
+          COLUMNS=12
+          ;;
+          "neofetch(rxfetch) startup")
+          echo ""
+          echo $'\e[31mTHIS STEP IS BEST DONE LAST\e[0m'
+          read -p $'\e[31mCONTINUE?: \e[0m' cont
+          echo ""
+          if [ "$cont" == "yes"  ]
+          then
+          cd ~ &&
+          cd .. &&
+          echo "rxfetch" >> usr/etc/profile.d/init-termux-properties.sh
+          echo ""
+          echo $'\e[36mRestart termux to take effect\e[0m'
+          sleep 1 &&
+          clear
+          termux_config
+          COLUMNS=12
+          else
+          sleep 1 &&
+          clear
+          termux_config
+          COLUMNS=12
+          fi
+          ;;
+          "Set Figlet Startup Message")
+          echo ""
+          read -p $'\e[36mStartup Message?: \e[0m' smsg
+          echo ""
+          cd ~ &&
+          cd .. &&
+          echo $'\e[1;36m-----------------------------------------------------\e[0m' >> usr/etc/profile.d/init-termux-properties.sh &&
+          echo "figlet -f lean $smsg" >> usr/etc/profile.d/init-termux-properties.sh &&
+          echo $'\e[1;36m-----------------------------------------------------\e[0m' >> usr/etc/profile.d/init-termux-properties.sh
+          echo ""
+          echo $'\e[1;36mRestart termux to take effect\e[0m'
+          sleep 1 &&
+          clear
           termux_config
           COLUMNS=12
           ;;
@@ -195,20 +462,24 @@ case $opt in
           then
                termux_config
           fi
-          asci_intro
+          termux_config
+          COLUMNS=12
+          ;;
+          "oh-my-zsh menu")
+          echo ""
+          clear
+          ohmyzshmenu
           termux_config
           COLUMNS=12
           ;;
           "View Installed Packages")
           pkg list-installed
-          asci_intro
           termux_config
           COLUMNS=12
           ;;
           "Search For Package")
           read -p $'\e[31mQuery?: \e[0m' package
           pkg search $package
-          asci_intro
           termux_config
           COLUMNS=12
           ;;
@@ -216,32 +487,27 @@ case $opt in
           pkg install rxfetch
           clear
           rxfetch
-          asci_intro
           termux_config
           COLUMNS=12
           ;;
           "Install Package")
           read -p $'\e[31mPackage?: \e[0m' package
           pkg install $package
-          asci_intro
           termux_config
           COLUMNS=12
           ;;
           "Change Repo")
           termux-change-repo
-          asci_intro
           termux_config
           COLUMNS=12
           ;;
           "Install X11 Repo")
           pkg install x11-repo
-          asci_intro
           termux_config
           COLUMNS=12
           ;;
           "Install Root Repo")
           pkg install root-repo
-          asci_intro
           termux_config
           COLUMNS=12
           ;;
@@ -261,30 +527,6 @@ case $opt in
 esac
 done
 }
-#start asci intro here
-clear
-asci_intro() {
-echo $'\e[32m *********************************************\e[0m'
-echo $'\e[32m * __  __                 __  __             *\e[0m'
-echo $'\e[32m *|  \/  |_   ___  __    |  \/  | __ _ _ __  *\e[0m'
-echo $'\e[32m *| |\/| | | | \ \/ /____| |\/| |/ _` | `_ \ *\e[0m'
-echo $'\e[32m *| |  | | |_| |>  <_____| |  | | (_| | | | |*\e[0m'
-echo $'\e[32m *|_|  |_|\__,_/_/\_\    |_|  |_|\__,_|_| |_|*\e[0m'
-echo $'\e[32m *********************************************\e[0m'
-}
-credits() {
-echo $'\e[36m╭━━╮╱╱╱╭━╮╱╱╱╱╱╭━━━╮╱╭━╮\e[0m'
-echo $'\e[36m┃╭╮┣┳┳╮┃━╋┳┳┳┳┳┫╭━╮┣┳┫━┫\e[0m'
-echo $'\e[36m┃╭╮┃┃┣┫┃╭┫┃┃╭┫┃┃┃┃┃┃┃┣━┃\e[0m'
-echo $'\e[36m╰━━╋╮┣╯╰╯╰━┻╯┣╮┃┃┃┃┣━┻━╯\e[0m'
-echo $'\e[36m╱╱╱╰━╯╱╱╱╱╱╱╱╰━┫╰━╯┃\e[0m'
-}
-root_art() {
-echo $'\e[1;31m______ _____  _____ _____ \e[0m'
-echo $'\e[1;31m| ___ \  _  ||  _  |_   _|\e[0m'
-echo $'\e[1;31m| |_/ / | | || | | | | |  \e[0m'
-echo $'\e[1;31m|    /| | | || | | | | |  \e[0m'
-echo $'\e[1;31m| |\ \| \_/ /\ \_/ / | |  \e[0m'
-echo $'\e[1;31m\_| \_|\___/  \___/  \_/  \e[0m'
-}
+echo $'\e[0m'
 main_menu
+echo $'\e[0m'
