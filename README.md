@@ -1,11 +1,13 @@
 # Muxman
 shell based termux management script
 # Installation
-git clone https://github.com/Fury0us/termcon
+git clone https://github.com/Fury0us/muxman
 # Run
 cd muxman
 #
 bash (or sudo bash) muxman.sh 
+#
+or ./muxman.sh
 ## 1st update
 added some graphics all well as fixed some bugs
 ## 2nd update
