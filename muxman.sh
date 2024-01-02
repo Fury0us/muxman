@@ -37,19 +37,9 @@ echo -en '\n'
 root_art
 echo -en '\n'
 PS3=("#fileman: ")
-filesman=("Custom Location" "Termux to Downloads(Internal)" "Downloads to Termux(Home)" "Open File Permissions" "Previous Menu" "Main Menu")
+filesman=("Termux to Downloads(Internal)" "Downloads to Termux(Home)" "Previous Menu" "Main Menu")
 select fil in "${filesman[@]}"; do
 case $fil in
-"Custom Location")
-read -p $'\e[31mFile Location?: \e[0m' flloc
-echo -en '\n'
-read -p $'\e[31mCopy Location?: \e[0m' cploc
-echo -en '\n'
-echo $'\e[31mMAKE SURE TSU IS INSTALLED\e[0m'
-sleep 2
-sudo cp $flloc $cploc
-file_menu
-;;
 "Termux to Downloads(Internal)")
 read -p $'\e[31mFile?: \e[0m' tdfl
 echo -en '\n'
@@ -64,17 +54,6 @@ echo -en '\n'
 echo $'\e[31mMAKE SURE TSU IS INSTALLED!\e[0m'
 sleep 2
 sudo cp /storage/self/primary/Download/"$dtfl" /data/data/com.termux/files/home
-file_menu
-;;
-"Open File Permissions")
-echo -en '\n'
-echo $'\e[31mThis will change a files permissions so that anyone can read, write, and execute\e[0m'
-echo -en '\n'
-sleep 3
-read -p $'\e[31mFile?: \e[0m' xfile
-echo -en '\n'
-sudo chmod a+rwx $xfile
-echo -en '\n'
 file_menu
 ;;
 "Previous Menu")
@@ -94,7 +73,7 @@ echo ""
 asci_intro
 echo ""
 PS3=("#tools: ")
-toolsmenu=("Install Tool-X" "Install Sqlmap" "Install Wifite" "Install Airgeddon" "Install Nikto" "Install fsociety" "Previous Menu")
+toolsmenu=("Install Tool-X" "Install Sqlmap" "Install Nikto" "Install fsociety" "Previous Menu")
 select too in "${toolsmenu[@]}"; do
 case $too in
 "Install Tool-X")
@@ -122,33 +101,6 @@ echo $'\e[31mcd sqlmap & python2 sqlmap.py\e[0m'
 echo -en '\n'
 sleep 3 &&
 python3 sqlmap.py
-tools_menu
-;;
-"Install Wifite")
-apt update -y &&
-apt upgrade -y &&
-apt install git python2 -y &&
-git clone https://github.com/derv82/wifite2.git &&
-cd wifite2 &&
-chmod +x Wifite.py &&
-chmod +x setup.py &&
-python2 setup.py install
-echo "Wifite has been installed, please make sure you have root functionality or it wont work"
-echo -en '\n'
-echo "best to install as root user to prevent issues"
-sleep 3
-tools_menu
-;;
-"Install Airgeddon")
-pkg update -y &&
-pkg upgrade -y &&
-pkg install git python ffmpeg wget curl &&
-git clone https://github.com/v1s1t0r1sh3r3/airgeddon.git &&
-cd airgeddon &&
-echo "Airgeddon has been installed, please make sure you have root functionality or it wont work"
-echo -en '\n'
-echo "best to install as root user to prevent issues"
-sleep 3
 tools_menu
 ;;
 "Install Nikto")
@@ -258,18 +210,9 @@ echo ""
 COLUMNS=12
 echo -en '\n'
 PS3=("#super: ")
-surtmnu=("Install Sudo Functionality" "SU session" "Device Options" "Transfer to/from internal storage" "Auditing Tools" "Main Menu" "Exit")
+surtmnu=("SU session" "Device Options" "Transfer to/from internal storage" "Auditing Tools" "Main Menu" "Exit")
 select surt in "${surtmnu[@]}"; do
 case $surt in
-"Install Sudo Functionality")
-pkg update &&
-pkg upgrade &&
-pkg install tsu &&
-clear &&
-echo $'\e[31myou can now use the "sudo" command to run normal linux like commands\e[0m'
-sleep 2
-surootmenu
-;;
 "SU session")
 echo -en '\n'
 echo $'\e[1;31mtype "exit" to return to terminal! \e[0m'
@@ -407,16 +350,62 @@ esac
 done
 }
 mac_menu() {
-echo "mac menu"
+PS3=("#mac: ")
+macaddr=("Alike MAC" "Random MAC" "Act As Burnt-In" "Custom MAC" "previous menu")
+select maca in "${macaddr[@]}"; do
+case $maca in
+"Alike MAC")
+echo "alike"
+;;
+"Random MAC")
+echo "random"
+;;
+"Act As Burnt-In")
+echo "burnt"
+;;
+"Custom MAC")
+echo "custom"
+;;
+"previous menu")
+clear
+echo ""
 dev_opt
+;;
+esac
+done
 }
 ip_menu() {
-echo "ip menu"
+PS3=("#ip: ")
+ipadd=("Random IP" "Custom IP" "previous menu")
+select ipa in "${ipadd[@]}"; do
+case $ipa in
+"Random IP")
+echo "custom"
+;;
+"Custom IP")
+echo "custom"
+;;
+"previous menu")
+clear
 dev_opt
+;;
+esac
+done
 }
 change_dev_info() {
-echo "spoof device"
+PS3=("#spoof: ")
+spoof=("START SPOOFING ALL(MAC & IP)" "previous menu")
+select sp in "${spoof[@]}"; do
+case $sp in
+"START SPOOFING ALL(MAC & IP)")
+echo "major spoof"
+;;
+"previous menu")
+clear
 dev_opt
+;;
+esac
+done
 }
 ohmyzshmenu() {
 #oh-my-zsh menu
@@ -444,7 +433,7 @@ echo ""
 cd ~ &&
 echo "alias $ali='$scph'" >> .zshrc
 echo ""
-echo $'\e[36mAlias Created, please restart termux\e[0m'
+echo $'\e[36mAlias Created, please restart termux to take effect or source .rc file\e[0m'
 sleep 1
 echo ""
 ohmyzshmenu
