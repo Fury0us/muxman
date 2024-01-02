@@ -24,3 +24,5 @@ added too many options to list here, but some include:
 - and many more
 ## Update 12/26/23
 fixed a few bugs and added a few more tools
+## update 01/01/24
+fleshed out the superuser menu a bit more
